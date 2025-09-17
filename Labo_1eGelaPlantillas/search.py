@@ -34,6 +34,7 @@ class SearchProblem(ABC):
     def getStartState(self):
         """
         Returns the start state for the search problem.
+        Devuelve el estado inicial del problema de búsqueda.
         """
         util.raiseNotDefined()
 
@@ -43,6 +44,7 @@ class SearchProblem(ABC):
           state: Search state
 
         Returns True if and only if the state is a valid goal state.
+        Devuelve Verdadero si y solo si el estado es un estado objetivo válido.
         """
         util.raiseNotDefined()
 
@@ -55,16 +57,22 @@ class SearchProblem(ABC):
         action, stepCost), where 'successor' is a successor to the current
         state, 'action' is the action required to get there, and 'stepCost' is
         the incremental cost of expanding to that successor.
+
+        Estado: Estado de búsqueda
+
+        Para un estado dado, esto debería devolver una lista de tripletas (sucesor, acción, coste de paso),
+        donde «sucesor» es un sucesor del estado actual, «acción» es la acción necesaria para llegar a él
+        y «costo de paso» es el coste incremental de la expansión a ese sucesor.
         """
         util.raiseNotDefined()
 
     @abstractmethod
     def getCostOfActions(self, actions):
         """
-         actions: A list of actions to take
+         acciones: Una lista de acciones a realizar.
 
-        This method returns the total cost of a particular sequence of actions.
-        The sequence must be composed of legal moves.
+        Este método devuelve el coste total de una secuencia específica de acciones.
+        La secuencia debe estar compuesta de movimientos válidos.
         """
         util.raiseNotDefined()
 
@@ -95,7 +103,35 @@ def depthFirstSearch(problem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    # util.raiseNotDefined()
+    visitados = set() # Congunto de datos no repetidos
+    pila = util.Stack() # Sitios que aún no he visitado
+    direcciones = [] # De donde he venido
+    actual = problem.getStartState() # Donde estoy.
+
+
+    direcciones.append(actual)
+    for i in problem.getSuccessors(actual):
+        # Si no lo he visitado
+        if i not in visitados:
+            visitados.add(i)
+            pila.push(i)
+            direcciones.append(i)
+
+        # Miro si estoy en el goalState
+        if not i.isGoalState(actual):
+            actual = i.getSuccessors(actual)
+
+        else:
+            break
+
+
+
+
+
+
+
+
 
 
 def breadthFirstSearch(problem):
