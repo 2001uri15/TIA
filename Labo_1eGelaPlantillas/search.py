@@ -167,7 +167,29 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    #util.raiseNotDefined()
+
+    inic = problem.getStartState()
+    sucesores = util.PriorityQueue()
+    visitados = set()
+    posAct = inic
+
+    # y ponerlo así
+    sucesores.push((posAct, []), 0)
+    while not sucesores.isEmpty():
+        posAct, direcciones = sucesores.pop()  # siguiente estado, accion (norte, sur, este, oeste)
+        if problem.isGoalState(posAct):
+            return direcciones
+        visitados.add(posAct)  # Añadimos al conjunto las casillas visitadas
+        for sucesor in problem.getSuccessors(posAct):
+            if sucesor[0] not in visitados:
+                visitados.add(sucesor[0])  # Si no introducimos esta sentencia al recorre por nivel puede que algunos elementos se añadan dos veces a la cola
+                # Esto sucede porque la cola es una estructura FIFO y al tener varios caminos puede que haya elementos que tienen los mismos sucesores
+                direccion = sucesor[1]
+                faltante = direcciones + [direccion]
+                peso = problem.getCostOfActions(faltante)
+                sucesores.push((sucesor[0], faltante), peso)  # El error está en que cada vez
+    return None
 
 
 def nullHeuristic(state, problem=None):
