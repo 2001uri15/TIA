@@ -104,29 +104,25 @@ def depthFirstSearch(problem):
     """
     "*** YOUR CODE HERE ***"
     # util.raiseNotDefined()
-    visitados = set() # Congunto de datos no repetidos
-    pila = util.Stack() # Sitios que aún no he visitado
-    direcciones = [] # De donde he venido
-    actual = problem.getStartState() # Donde estoy.
+    estadoIni = problem.getStartState()
+    sucesores = util.Stack() # Declaramos la variable de los sucesores como una pila
+    visitados = set() # Conjunto de posiciones visitados; No se pueden repetirr
+    posAct = estadoIni # Posición actual
 
+    # y ponerlo así
+    sucesores.push((posAct, []))
+    while not sucesores.isEmpty():
+        posAct, direcciones = sucesores.pop()  # siguiente estado, accion (norte, sur, este, oeste)
+        if problem.isGoalState(posAct):
+            return direcciones # Debolvemos el recorrido si es a donde queremos llegar
+        visitados.add(posAct)  # Añadimos al conjunto las casillas visitadas
+        for sucesor in problem.getSuccessors(posAct):
+            if sucesor[0] not in visitados:
+                direccion = sucesor[1]
+                faltante = direcciones + [direccion]
+                sucesores.push((sucesor[0], faltante))
 
-    direcciones.append(actual)
-    for i in problem.getSuccessors(actual):
-        # Si no lo he visitado
-        if i not in visitados:
-            visitados.add(i)
-            pila.push(i)
-            direcciones.append(i)
-
-        # Miro si estoy en el goalState
-        if not i.isGoalState(actual):
-            actual = i.getSuccessors(actual)
-
-        else:
-            break
-
-
-
+    return None
 
 
 
