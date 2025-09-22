@@ -125,41 +125,37 @@ def depthFirstSearch(problem):
     return None
 
 
-
-
-
-
-
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
 
     estadoIni = problem.getStartState()
     sucesores = util.Queue()
-    visitadas = set()
+    posicionesVisitadas = set()
+    posAct = estadoIni
     direcciones = []
-    nodoAct = estadoIni
 
-    for sucesor in problem.getSuccessors(nodoAct):
-        direccion = sucesor[1]
-        hastaLlegar = direcciones + [direccion]
-        sucesores.push((sucesor[0], hastaLlegar))
+    sucesores.push((posAct, []))
 
-    while not problem.isGoalState(nodoAct) and not sucesores.isEmpty():
-        nodoAct, direcciones = sucesores.pop()
-        visitadas.add(nodoAct)
-        for sucesor in problem.getSuccessors(nodoAct):
-            if sucesor[0] not in visitadas:
+    while not sucesores.isEmpty(): 
+        posAct, direcciones = sucesores.pop()
+        if problem.isGoalState(posAct):
+            return direcciones
+
+        
+        posicionesVisitadas.add(posAct)
+
+        for sucesor in problem.getSuccessors(posAct):
+            
+            if sucesor[0] not in posicionesVisitadas:
+                posicionesVisitadas.add(sucesor[0]) 
                 direccion = sucesor[1]
-                hastaLlegar = direcciones + [direccion]
+                
+                hastaLlegar =  direcciones + [direccion]
                 sucesores.push((sucesor[0], hastaLlegar))
 
-    if sucesores.isEmpty and not problem.isGoalState(nodoAct):
-        direcciones = None
-
-    print(direcciones)
-
-    return direcciones
+    
+    return None
     
     # util.raiseNotDefined()
 
