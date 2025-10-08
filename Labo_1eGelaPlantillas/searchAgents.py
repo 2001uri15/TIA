@@ -351,13 +351,30 @@ class CornersProblem(search.SearchProblem):
         """
 
         successors = []
+        posAct = state[0]
+        "*** state es una tupla con la posición del pacman y la lista de las esquinas visitadas *"""
+        esquinas = list(state[1])
+        
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
-            # Add a successor state to the successor list if the action is legal
-            # Here's a code snippet for figuring out whether a new position hits a wall:
-            #   x,y = currentPosition
-            #   dx, dy = Actions.directionToVector(action)
-            #   nextx, nexty = int(x + dx), int(y + dy)
-            #   hitsWall = self.walls[nextx][nexty]
+            x, y = posAct
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+            
+            if not self.walls[nextx][nexty]:
+                nextState = (nextx, nexty)
+                nuevasEsquinasVis = list(esquinas)
+                
+                if nextState ==self.corners[0]:
+                    nuevasEsquinasVis[0] = True
+                elif nextState ==self.corners[1]:
+                    nuevasEsquinasVis[1] = True
+                elif nextState ==self.corners[2]:
+                    nuevasEsquinasVis[2] = True
+                elif nextState ==self.corners[3]:
+                    nuevasEsquinasVis[3] = True
+
+                
+                successors.append(((nextState, tuple(nuevasEsquinasVis)), action, 1))
 
             "*** YOUR CODE HERE ***"
 
@@ -530,7 +547,9 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        #util.raiseNotDefined()
+
+        return search.breadthFirstSearch(problem) # De la clase Search.py
 
 
 class AnyFoodSearchProblem(PositionSearchProblem):
@@ -568,8 +587,10 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         x, y = state
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
-
+        # util.raiseNotDefined()
+        hayFood = self.food[x][y]
+        return hayFood
+        
 
 def mazeDistance(point1, point2, gameState):
     """
